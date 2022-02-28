@@ -1,0 +1,94 @@
+<!-- <!DOCTYPE html> -->
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Todo_App</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;1,500&display=swap"
+        rel="stylesheet">
+
+
+</head>
+
+<body>
+    <div class="entirepage">
+        <div id="aufgabenApp">
+
+            <h1 class="starttext">To do-Liste</h1>
+            <p>
+                <label for="neueAufgabe"></label>
+            <p><em>To-do's</em></p></label>
+            <input type="text" id="neueAufgabe" v-model="neueAufgabe">
+            <button class="hinzu" @click="aufgabeHinzu">Hinzufügen</button>
+            </p>
+
+            <h1>Alle To-do's</h1>
+            <ul>
+                <li v-for="(aufgabe, index) in aufgaben" :class=" {'abgeschlossen' : aufgabe.fertig}">
+                    <p>{{aufgabe.beschreibung}}</p>
+                    <button class="erledigtWechseln" @click="erledigtWechseln(index)">✓</button>
+                    <button class="loeschen" @click="loeschen(index)">x</button>
+                </li>
+            </ul>
+
+            <h2>Ausstehende Aufgaben</h2>
+            <ul>
+                <li v-for="aufgabe in nichterledigt">{{ aufgabe.beschreibung }}</li>
+            </ul>
+
+            <h2>Abgeschlossene Aufgaben</h2>
+            <ul>
+                <li v-for="aufgabe in erledigt">{{ aufgabe.beschreibung }}</li>
+            </ul>
+
+        </div>
+
+
+
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: "#aufgabenApp",
+            data: {
+                aufgaben: [
+                    { beschreibung: "Aufräumen", fertig: true },
+                    { beschreibung: "Untericht Vorbereiten", fertig: false },
+                    { beschreibung: "Laufen", fertig: false },
+                    { beschreibung: "ILS Aufgaben Bearbeiten", fertig: false },
+                    { beschreibung: "Mails Checken", fertig: false },
+                    { beschreibung: "Arbeit(Decathlon)", fertig: false },
+
+                ],
+                neueAufgabe: ''
+            },
+            computed: {
+                erledigt() {
+                    return this.aufgaben.filter(aufgabe => aufgabe.fertig);
+                },
+                nichterledigt() {
+                    return this.aufgaben.filter(aufgabe => !aufgabe.fertig);
+                },
+            },
+            methods: {
+                aufgabeHinzu() {
+                    this.aufgaben.push({ beschreibung: this.neueAufgabe, fertig: false });
+                    this.neueAufgabe = '';
+                },
+                loeschen(index) {
+                    this.aufgaben.splice(index, 1);
+                },
+                erledigtWechseln(index) {
+                    this.aufgaben[index].fertig = !this.aufgaben[index].fertig;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
